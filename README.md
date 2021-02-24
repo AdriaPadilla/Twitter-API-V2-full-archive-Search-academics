@@ -5,9 +5,9 @@ Here you will find a fully functional example of how "Search Tweets" Endpoint (T
 - A Bearer Token (once your access is aproved, you'll need to create a new app and generate de Token).
 
 ## Before Using
-Before using, please carefully read the documentation available on the twitter API V2. This is not intended to be a perfect example, but it can help you better understand how the API works, and how to perform queries taking advantage of the access level for researchers.
+Before using, please carefully read the documentation available on the twitter API V2. This is not intended to be a perfect example, but it can help you better understand how the API works, and how to perform queries taking advantage of the access level for researchers. There you will find answers to many of the questions you may have.
 
-
+[Search Tweets READ THE DOCS](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction)
 
 ## Dependencies
 ```bash
@@ -25,6 +25,11 @@ You'll need:
 - Commandline interface (Windows/linux/MacOs terminals)
 
 ## Script workflow
+launch with 
+```
+python3 main.py
+```
+
 - Get params.py "pharses" variable, where you'll have defined at least one query.
 - Get params.py "query_params" variable, where requested elements are defined.
 - For loop for each query.
@@ -32,8 +37,5 @@ You'll need:
 - If pagination token in results (will be presents if more than 500 results), get pagination token and iterate over the loop
 - If pagination token is not in results, end for loop and start a new query.
 
-
 ## API RATE LIMITS
-Twitter API V2, and more precisely, Twitter Full-archive search for Academic Research, have a rate limit of 300 request in a 15 min window.
-
-
+Twitter API V2, and more precisely, Twitter Full-archive search for Academic Research, have a rate limit of 300 request in a 15 min window. Please, don't change sleep times between queries. 
