@@ -30,9 +30,8 @@ launch with
 python3 main.py
 ```
 
-- Get params.py "pharses" variable, where you'll have defined at least one query.
-- Get params.py "query_params" variable, where requested elements are defined.
-- For loop for each query.
+- In params.py "pharses" variable, you can define the list of queries. You can use boolean operators [Building queries for Search Tweets](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query)
+- main For loop for each query.
 - For query, dump response in MYSQL database with json_dumper.py config.
 - If pagination token in results (will be presents if more than 500 results), get pagination token and iterate over the loop
 - If pagination token is not in results, end for loop and start a new query.
