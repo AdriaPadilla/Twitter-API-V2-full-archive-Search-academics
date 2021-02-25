@@ -1,4 +1,4 @@
-# Twitter Full-archive search for Academic Research
+# Twitter API V2 Full Archive Search for Academic Research
 
 Here you will find a fully functional example of how "Search Tweets" Endpoint (Twitter API V2) works. You'll need:
 - Access to the full [Twitter Archive for Academic Research](https://developer.twitter.com/en/solutions/academic-research)
