@@ -49,7 +49,7 @@ def save_data(json_response,counter,pharse):
                         media_type = media_attached["type"]
                         if media_type == "video":
                             ms_media_duration = media_attached["duration_ms"]
-                            media_duration = ms_media_duration/1000
+                            media_duration = ms_media_duration / 1000
                             media_views = media_attached["public_metrics"]["view_count"]
                         else:
                             pass
@@ -64,8 +64,9 @@ def save_data(json_response,counter,pharse):
         except KeyError:
             reply = "false"
 
+        # Get entities
 
-            # Hashtag list
+        # Hashtag list
         try:
             entities = element["entities"]
             hastags = entities["hashtags"]
@@ -73,10 +74,13 @@ def save_data(json_response,counter,pharse):
             for hastag in hastags:
                 hash = hastag["tag"]
                 hashtag_list.append(hash)
+                hashtags_string = ";".join(hashtag_list)
         except KeyError:
-            hashtag_list = "false"
+            hashtags_string = "false"
 
-            # MENTIONS
+        # MENTIONS
+
+
         try:
             entities = element["entities"]
             mentions = entities["mentions"]
@@ -84,10 +88,11 @@ def save_data(json_response,counter,pharse):
             for mention in mentions:
                 user = mention["username"]
                 mentions_list.append(user)
+                mentions_string = ";".join(mentions_list)
         except KeyError:
-            mentions_list = "false"
+            mentions_string = "false"
 
-            # Anotations TYPE
+        # Anotations TYPE
         try:
             entities = element["entities"]
             anotations = entities["annotations"]
@@ -98,10 +103,12 @@ def save_data(json_response,counter,pharse):
                 anotations_type_list.append(type)
                 text = anotation["normalized_text"]
                 anotations_element_list.append(text)
+                annotations_type_string = ";".join(anotations_type_list)
+                annotations_elements_string = ";".join(anotations_element_list)
 
         except KeyError:
-            anotations_type_list = "false"
-            anotations_element_list = "false"
+            annotations_type_string = "false"
+            annotations_elements_string = "false"
 
         # GEO DATA
 
@@ -120,19 +127,23 @@ def save_data(json_response,counter,pharse):
                 place_name = "false"
                 pass
             try:
-               coordinates = geo["coordinates"]["coordinates"]
+                coordinates = geo["coordinates"]["coordinates"]
+                list_lat_lon = []
+                for coordinate in coordinates:
+                    coord_string = str(coordinate)
+                    list_lat_lon.append(coord_string)
+                coordinates_string = ";".join(list_lat_lon)
             except KeyError:
-                coordinates = "false"
+                coordinates_string = "false"
                 pass
         except KeyError:
             place_id = "false"
-            coordinates = "false"
+            coordinates_string = "false"
             place_name = "false"
-
 
         # Generate the Dataframe
 
-        df = pd.DataFrame ({
+        df = pd.DataFrame({
             "retrieved_at": actual_time,
             "tweet_id": element["id"],
             "tweet_created_at": element["created_at"],
@@ -151,14 +162,13 @@ def save_data(json_response,counter,pharse):
             "if_video_duration": media_duration,
             "if_video_views": media_views,
             "tweet_url": f"https://twitter.com/{username}/status/{element['id']}",
-            "ent_hashtags": [hashtag_list],
-            "ent_mentions": [mentions_list],
-            "ent_anotation_types": [anotations_type_list],
-            "ent_anotation_elements": [anotations_element_list],
+            "ent_hashtags": hashtags_string,
+            "ent_mentions": mentions_string,
+            "ent_anotation_types": annotations_type_string,
+            "ent_anotation_elements": annotations_elements_string,
             "place_id": place_id,
             "place_name": place_name,
-            "coordinates": [coordinates],
-
+            "coordinates": coordinates_string,
         }, index=[0])
 
         general_df.append(df)
