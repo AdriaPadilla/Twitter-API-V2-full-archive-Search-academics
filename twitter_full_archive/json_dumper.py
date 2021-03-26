@@ -54,21 +54,94 @@ def save_data(json_response,counter,pharse):
                             pass
                     else:
                         pass
-
         except KeyError:
             media_type = "false"
+
+        # In Reply To ID
+        try:
+            reply = element["in_reply_to_user_id"]
+        except KeyError:
+            reply = "false"
+
+
+        # Get entities
+        entities = element["entities"]
+
+            # Hashtag list
+        try:
+            hastags = entities["hashtags"]
+            hashtag_list = []
+            for hastag in hastags:
+                hash = hastag["tag"]
+                hashtag_list.append(hash)
+        except KeyError:
+            hashtag_list = "false"
+
+            # MENTIONS
+        try:
+            mentions = entities["mentions"]
+            mentions_list = []
+            for mention in mentions:
+                user = mention["username"]
+                mentions_list.append(user)
+        except KeyError:
+            mentions_list = "false"
+
+            # Anotations TYPE
+        try:
+            anotations = entities["annotations"]
+            anotations_type_list = []
+            anotations_element_list = []
+            for anotation in anotations:
+                type = anotation["type"]
+                anotations_type_list.append(type)
+                text = anotation["normalized_text"]
+                anotations_element_list.append(text)
+
+        except KeyError:
+            anotations_type_list = "false"
+            anotations_element_list = "false"
+
+        # GEO DATA
+
+        try:
+            geo = element["geo"]
+            try:
+                place_id = geo["place_id"]
+                places = json_response["includes"]["places"]
+                for place in places:
+                    if place["id"] == place_id:
+                        place_name = place["full_name"]
+                    else:
+                        pass
+            except KeyError:
+                place_id = "false"
+                place_name = "false"
+                pass
+            try:
+               coordinates = geo["coordinates"]["coordinates"]
+            except KeyError:
+                coordinates = "false"
+                pass
+        except KeyError:
+            place_id = "false"
+            coordinates = "false"
+            place_name = "false"
+
 
         # Generate the Dataframe
 
         df = pd.DataFrame ({
-            "query": pharse,
             "retrieved_at": actual_time,
             "tweet_id": element["id"],
             "tweet_created_at": element["created_at"],
             "sensitive": element["possibly_sensitive"],
+            "lang": element["lang"],
             "source": element["source"],
             "username": username,
+            "user_id": element["author_id"],
             "text": element["text"],
+            "in_reply_to_id": reply,
             "rt_count": element["public_metrics"]["retweet_count"],
             "reply_count": element["public_metrics"]["reply_count"],
             "like_count": element["public_metrics"]["like_count"],
@@ -76,7 +149,15 @@ def save_data(json_response,counter,pharse):
             "has_media": media_type,
             "if_video_duration": media_duration,
             "if_video_views": media_views,
-            "tweet_url": f"https://twitter.com/{username}/status/{element['id']}"
+            "tweet_url": f"https://twitter.com/{username}/status/{element['id']}",
+            "ent_hashtags": [hashtag_list],
+            "ent_mentions": [mentions_list],
+            "ent_anotation_types": [anotations_type_list],
+            "ent_anotation_elements": [anotations_element_list],
+            "place_id": place_id,
+            "place_name": place_name,
+            "coordinates": [coordinates],
+
         }, index=[0])
 
         general_df.append(df)
