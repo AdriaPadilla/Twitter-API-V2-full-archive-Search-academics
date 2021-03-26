@@ -67,7 +67,7 @@ def save_data(json_response,counter,pharse):
 
             # Hashtag list
         try:
-        	entities = element["entities"]
+        	  entities = element["entities"]
             hastags = entities["hashtags"]
             hashtag_list = []
             for hastag in hastags:
@@ -78,7 +78,7 @@ def save_data(json_response,counter,pharse):
 
             # MENTIONS
         try:
-        	entities = element["entities"]
+        	  entities = element["entities"]
             mentions = entities["mentions"]
             mentions_list = []
             for mention in mentions:
@@ -89,7 +89,7 @@ def save_data(json_response,counter,pharse):
 
             # Anotations TYPE
         try:
-        	entities = element["entities"]
+        	  entities = element["entities"]
             anotations = entities["annotations"]
             anotations_type_list = []
             anotations_element_list = []
