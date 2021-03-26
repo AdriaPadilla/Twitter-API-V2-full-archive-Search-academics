@@ -12,18 +12,19 @@ host = "¿Where is your DB? (localhost?)"
 db_name = "The Database Name"
 db_table = "Your DB Table" # If table doesn't exists, will create. If Exist, will append
 
-engine = create_engine(f"mysql+pymysql://{db_user}:{db_password}@{host}/{db_name}?charset=utf8mb4")
-connection = pymysql.connect(host=host,
-                             user=db_user,
-                             password=db_password,
-                             db=db_name,
-                             charset="utf8mb4")
+engine = create_engine(f"mysql+pymysql://{db_user}:{db_password}@{host}/{db_name}?charset={charset}")
+connection = pymysql.connect(host= host,
+                             user= db_user,
+                             password= db_password,
+                             db= db_name,
+                             charset= charset)
 
 def save_data(json_response,counter,pharse):
     actual_time = datetime.now()
     data = json_response["data"]
 
     general_df = []
+
     for element in data:
 
         # Get the author name
@@ -64,11 +65,9 @@ def save_data(json_response,counter,pharse):
             reply = "false"
 
 
-        # Get entities
-        entities = element["entities"]
-
             # Hashtag list
         try:
+        	entities = element["entities"]
             hastags = entities["hashtags"]
             hashtag_list = []
             for hastag in hastags:
@@ -79,6 +78,7 @@ def save_data(json_response,counter,pharse):
 
             # MENTIONS
         try:
+        	entities = element["entities"]
             mentions = entities["mentions"]
             mentions_list = []
             for mention in mentions:
@@ -89,6 +89,7 @@ def save_data(json_response,counter,pharse):
 
             # Anotations TYPE
         try:
+        	entities = element["entities"]
             anotations = entities["annotations"]
             anotations_type_list = []
             anotations_element_list = []
@@ -167,5 +168,5 @@ def save_data(json_response,counter,pharse):
     final_df = pd.concat(general_df)
     capture_time = actual_time.strftime("%d-%m-%Y %H:%M:%S")
     captured_tweets = int(counter_n) * 500
-    print(f"loop nº {counter_n} for {pharse} dumped to DB at {capture_time} - 'APROX' captured Tweets: ({captured_tweets})")
+    print(f"loop nº {counter_n} for {pharse} dumped to DB at {capture_time} - Captured Tweets: ({captured_tweets})")
     final_df.to_sql(db_table, index=False, con=engine, if_exists='append', chunksize=1000, method='multi')
