@@ -7,7 +7,7 @@ import time
 import pandas as pd
 from datetime import datetime
 
-bearer_token = "AAAAAAAAAAAAAAAAAAAAAP1QMwEAAAAA3vtn3WXhlpGVymb3%2FrJTbj4yXlc%3DxdFCMXT9NTMLtkjFSYwudP1SPPV9kpeAzXCatcmbwoHRkzvw46"
+bearer_token = "Your Bearer Token"
 
 loop_counter = 1
 
