@@ -2,29 +2,17 @@ import os
 import json
 import pandas as pd
 
-import pymysql
-from sqlalchemy import create_engine
+
 from datetime import datetime
 
-db_user = "Your DB USER"
-db_password = "Your DB Password"
-host = "¿Where is your DB? (localhost?)"
-db_name = "The Database Name"
-db_table = "Your DB Table" # If table doesn't exists, will create. If Exist, will append
-
-engine = create_engine(f"mysql+pymysql://{db_user}:{db_password}@{host}/{db_name}?charset={charset}")
-connection = pymysql.connect(host= host,
-                             user= db_user,
-                             password= db_password,
-                             db= db_name,
-                             charset= charset)
+output_folder = "output/"
+actual_time = datetime.now()
 
 def save_data(json_response,counter,pharse):
-    actual_time = datetime.now()
+
     data = json_response["data"]
 
     general_df = []
-
     for element in data:
 
         # Get the author name
@@ -176,7 +164,16 @@ def save_data(json_response,counter,pharse):
     counter_n = str(counter)
 
     final_df = pd.concat(general_df)
-    capture_time = actual_time.strftime("%d-%m-%Y %H:%M:%S")
-    captured_tweets = int(counter_n) * 500
-    print(f"loop nº {counter_n} for {pharse} dumped to DB at {capture_time} - Captured Tweets: ({captured_tweets})")
-    final_df.to_sql(db_table, index=False, con=engine, if_exists='append', chunksize=1000, method='multi')
+
+    """ THIS IS ONLY IF YOU WANT TO SAVE JSON PURE DATA. CREATES ONE JSON FILE FOR EACH LOOP.
+    try:
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+        with open((output_folder + f"{counter_n}-ouptut.json"), 'w', encoding='utf-8') as f:
+            json.dump(json_response, f, ensure_ascii=False, indent=4)
+    except IndexError:
+        print("ERROR")
+        pass
+    """
+
+    return final_df
