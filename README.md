@@ -38,3 +38,12 @@ python3 main.py
 
 ## API RATE LIMITS
 Twitter API V2, and more precisely, Twitter Full-archive search for Academic Research, have a rate limit of 300 request in a 15 min window. Please, don't change sleep times between queries. 
+
+# NETWORK ANALYSIS (Added on 27/05/2021)
+* Created a new module (network.py) to create graph files for network analysis
+  - user/hashtag network
+  - co-hashtag network
+  - co-anotation network, composed by "edges table" + "nodes table" <- you will need to import and merge using Gephi. 
+
+
+
