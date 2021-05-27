@@ -1,20 +1,27 @@
 from params import query_params, pharses
 import query as q
 import json_dumper as dumper
-import time
+import network as gr
 
-bearer_token = "YOUT ACADEMIC BEARER TOKEN HERE"
+import time
+import pandas as pd
+from datetime import datetime
+
+bearer_token = "AAAAAAAAAAAAAAAAAAAAAP1QMwEAAAAA3vtn3WXhlpGVymb3%2FrJTbj4yXlc%3DxdFCMXT9NTMLtkjFSYwudP1SPPV9kpeAzXCatcmbwoHRkzvw46"
 
 loop_counter = 1
 
+global_df = []
+
 def loop(headers, query_params, pagination_token, loop_counter):
+    print("data from page: "+str(loop_counter))
     json_response = q.query_loop(headers, query_params, pagination_token)
-    dumper.save_data(json_response, loop_counter, pharse)
+    df = dumper.save_data(json_response, loop_counter, pharse)
+    global_df.append(df)
     try:
         if json_response["meta"]["next_token"]:
-            pagination_token = json_response["meta"]["next_token"] # New API V2 require pagination for each 500 results. Here we get the pagination token.
-            time.sleep(4)  # THIS AVOID HIT RATE LIMIT (300 Requests in a 15 Min Window)
-            print("sleeping for 4 sec")
+            pagination_token = json_response["meta"]["next_token"]
+            time.sleep(4)
             loop_counter += 1
             loop(headers, query_params, pagination_token, loop_counter)
     except KeyError:
@@ -24,20 +31,30 @@ def main(loop_counter, pharse):
     headers = q.create_headers(bearer_token)
     query_params["query"] = pharse
     json_response = q.query(headers, query_params)
-    dumper.save_data(json_response, loop_counter, pharse)
+    df = dumper.save_data(json_response, loop_counter, pharse)
+    global_df.append(df)
     try:
         if json_response["meta"]["next_token"]:
             pagination_token = json_response["meta"]["next_token"]
             loop_counter += 1
-            time.sleep(4) # THIS AVOID HIT RATE LIMIT (300 Requests in a 15 Min Window)
-            print("sleeping for 4 sec")
+            time.sleep(4)
             loop(headers, query_params, pagination_token, loop_counter)
     except KeyError:
         print("Last Page")
 
 if __name__ == "__main__":
 
-      for pharse in pharses:
+    for pharse in pharses:
         pharse = pharse["value"]
-        main(loop_counter, pharse)
+        print(pharse)
 
+        main(loop_counter, pharse)
+        print("creating final Dataframe")
+        final_frame = pd.concat(global_df)
+        print("creating graph files")
+        gr.graph(final_frame)
+
+        actual_time = datetime.now()
+        capture_time = actual_time.strftime("%d-%m-%Y-%H-%M-%S")
+        print("saving data in excel file")
+        final_frame.to_excel(f"{capture_time}-ouptut.xlsx")
