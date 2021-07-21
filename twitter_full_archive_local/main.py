@@ -57,7 +57,7 @@ if __name__ == "__main__":
         end_date = datetime.strptime(row["end"], "%d/%m/%Y").strftime("%Y-%m-%d")
         start_time = row["start_time"]
         end_time = row["end_time"]
-        hashtag = row["hashtag"]
+        hashtag = row["query"]
 
         # create the query string
         query_params, pharse = p.parameters(start_date, end_date, start_time, end_time, hashtag)
