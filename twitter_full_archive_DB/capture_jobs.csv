@@ -1,4 +1,4 @@
-start;start_time;end;end_time;hashtag;date_format;time_format
+start;start_time;end;end_time;query;date_format;time_format
 22/08/2020;00:00:00;23/08/2020;00:00:00;#UCL;YYYY-MM-DD;HH:MM:SS
 31/05/2019;00:00:00;03/06/2019;00:00:00;#UCL;YYYY-MM-DD;HH:MM:SS
 25/05/2018;00:00:00;28/05/2018;00:00:00;#UCL;YYYY-MM-DD;HH:MM:SS
