@@ -39,10 +39,24 @@ def extractor(file, works, position):
                     try:
                         media_lists = element["attachments"]["media_keys"]
                         media_meta = data["includes"]["media"]
+
+                        # Multiple media elements in a single tweet need to place each element in a list and output them in the same cell.
+                        media_type_list = []
+                        media_url_list = []
+
+
                         for media in media_lists:
                             for media_attached in media_meta:
                                 if media == media_attached["media_key"]:
                                     media_type = media_attached["type"]
+                                    media_type_list.append(media_type)
+                                    if media_type == "photo":
+                                        media_url = media_attached["url"]
+                                        media_url_list.append(media_url)
+                                    else:
+                                        media_url = "false"
+                                        media_url_list.append(media_url)
+
                                     if media_type == "video":
                                         ms_media_duration = media_attached["duration_ms"]
                                         media_duration = ms_media_duration / 1000
@@ -52,7 +66,8 @@ def extractor(file, works, position):
                                 else:
                                     pass
                     except KeyError:
-                        media_type = "false"
+                        media_type_list = ["false"]
+                        media_url_list = ["false"]
 
                     # In Reply To ID
                     try:
@@ -160,9 +175,10 @@ def extractor(file, works, position):
                         "reply_count": element["public_metrics"]["reply_count"],
                         "like_count": element["public_metrics"]["like_count"],
                         "quote_count": element["public_metrics"]["quote_count"],
-                        "has_media": media_type,
+                        "has_media": [media_type_list],
                         "if_video_duration": media_duration,
                         "if_video_views": media_views,
+                        "media_url": [media_url_list],
                         "tweet_url": f"https://twitter.com/{username}/status/{element['id']}",
                         "ent_hashtags": hashtags_string,
                         "ent_mentions": mentions_string,
