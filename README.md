@@ -4,15 +4,15 @@ last update: 21/07/2021
 
 Here you will find a fully functional example of how "Search Tweets" Endpoint (Twitter API V2) works. You'll need:
 - Access to the full [Twitter Archive for Academic Research](https://developer.twitter.com/en/solutions/academic-research)
-- A Bearer Token (once your access is aproved, you'll need to create a new app and generate de Token).
+- A Bearer Token (once your access is aproved, you'll need to create a new app and generate the Bearer Token).
 
 ## Versions
-I created two versions for the same script
-- **DB version**: Will dump all data from the Twitter API to a MySQL database. 
-- **Local Version**: Will create a .json file for each loop (500 tweets per loop). When all data is downloaded, the script generates a .csv with all the data requested. One file for each different query defined in capture_jobs.csv (read more info below).
+I created two versions for the same script:
+- **DataBase version**: Will dump all data from the Twitter API to a MySQL/MariaDB database. 
+- **Local Version**: Will create a .json file for each loop (500 tweets per loop). When all data is downloaded, the script generates a .csv pharsing all .json files downloaded.
 
-### Recommended Version
-Some data extractions can be very extensive, resulting in large datasets of information. If you choose the local version, this will generate large numbers of .JSON files. In addition, the system must process these files to generate the final dataset, which can be very memory intensive. If you are going to make very large requests, I recommend using the database version, since it stores information more progressively and management is much simpler and requires fewer resources.
+### What version should I use ?
+Some data requests could be extensive and intensive, resulting in large datasets and long waiting times (hours). Choose the local version if you're going to do a selective download. Also, keep in mind: after data request (that will be stored in .Json), your system need to process these files to generate the final dataset in .csv format. This process can be RAM intensive. If you are going to make large requests, I'ld recommend you using the database version, since data from API is dumped directly to MySql/MariaDB, avoiding JSON files.
 
 
 ## Before Using
@@ -20,25 +20,27 @@ Before using, please carefully read the documentation available on the twitter A
 
 [Search Tweets READ THE DOCS](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction)
 
-## Dependencies
+## Possible Dependencies
 ```bash
 os
 json
 requests
 Pandas
-pymsql
-sqlalchemy
+Openyxl # For xlsx datasets
+pymsql # Only For DB Version
+sqlalchemy  # Only For DB Version
 ```
 ## Setup
 You'll need:
 - Python3 installed
 - Commandline interface (Windows/linux/MacOs terminals)
+- Recommend PyCharm IDE or similar, with virtual enviroments.
 
-if you use DB version, you'll need a local or cloud MySQL, user and credentials to dump the data.
+if you use DB version, you'll need a local or cloud MySQL/MariaDB. Also: user and credentials to access and dump the data.
 
 **Define credentials (credentials.py)**
 Copy/Paste your Twitter API Bearer Token in credentials.py
-If you use DB version, you'll need to define DB username, password and table names in the same file
+If you use DB version, you'll need to define DB username, password and table names in the same file.
 
 ## workflow
 ### 1. Define Search jobs in capture_jobs.csv
