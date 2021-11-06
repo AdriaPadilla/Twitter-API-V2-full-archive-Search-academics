@@ -70,10 +70,19 @@ def extractor(file, works, position):
                         media_url_list = ["false"]
 
                     # In Reply To ID
+                    reply_to_name = "false"
                     try:
-                        reply = element["in_reply_to_user_id"]
+                        reply_to_id = element["in_reply_to_user_id"]
+                        entities = element["entities"]
+                        mentions = entities["mentions"]
+                        for mention in mentions:
+                            if reply_to_id == mention["id"]:
+                                reply_to_name = mention["username"]
+                            else:
+                                pass
                     except KeyError:
-                        reply = "false"
+                        reply_to_id = "false"
+                        reply_to_name = "false"
 
                     # Get entities
 
@@ -155,7 +164,7 @@ def extractor(file, works, position):
                     # Get Year
                     year = element["created_at"].split("-")[0]
                     # Get Hashtag
-                    hashtag = file.split("__")[0]
+                    hashtag = file.split("__")[0].split("-")[1]
 
                     # Generate the Dataframe
                     df = pd.DataFrame({
@@ -163,14 +172,15 @@ def extractor(file, works, position):
                         "tweet_id": element["id"],
                         "tweet_created_at": element["created_at"],
                         "tweet_year": year,
-                        "hashtag": hashtag,
+                        "query": hashtag,
                         "sensitive": element["possibly_sensitive"],
                         "lang": element["lang"],
                         "source": element["source"],
                         "username": username,
                         "user_id": element["author_id"],
                         "text": element["text"],
-                        "in_reply_to_id": reply,
+                        "in_reply_to_id": reply_to_id,
+                        "in_reply_to_name": reply_to_name,
                         "rt_count": element["public_metrics"]["retweet_count"],
                         "reply_count": element["public_metrics"]["reply_count"],
                         "like_count": element["public_metrics"]["like_count"],
