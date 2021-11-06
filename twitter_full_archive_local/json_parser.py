@@ -9,7 +9,7 @@ actual_time = datetime.now()
 global_frame = []
 
 def extractor(file, works, position):
-    print(f"working on {position} of {works}")
+    print(f"working on {position+1} of {works}")
     with open(file, encoding="utf-8") as jsonfile:
         data = json.load(jsonfile)
 
@@ -214,15 +214,18 @@ def crontroller(filename):
     for file in files:
         position = files.index(file)
         dataframe = extractor(file, works, position)
-
-        global_frame.append(dataframe)
+        if dataframe != "empty":
+            global_frame.append(dataframe)
+        else:
+            print("no results for query")
+            pass
 
     try:
-        print("Concat Df")
         export_frame = pd.concat(global_frame)
         print("exporting Df")
         export_frame.to_csv(f"dataset-{filename}.csv", index=False)
         print("Done Df")
         global_frame.clear()
     except (ValueError, TypeError):
+        print("Nothing to Export")
         pass
