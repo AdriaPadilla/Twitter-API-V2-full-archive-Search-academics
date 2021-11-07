@@ -1,6 +1,12 @@
 # Twitter API V2 Full Archive Search for Academic Research
 
-last update: 21/07/2021
+### Updates LOG:
+06/11/2021: add "In_reply_to_username" in output .csv file for local version.
+
+### Workiing on:
+- Equalize code betweet versions.
+
+## Introduction
 
 Here you will find a fully functional example of how "Search Tweets" Endpoint (Twitter API V2) works. You'll need:
 - Access to the full [Twitter Archive for Academic Research](https://developer.twitter.com/en/solutions/academic-research)
