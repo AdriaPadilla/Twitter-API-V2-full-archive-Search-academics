@@ -1,9 +1,9 @@
 # Twitter API V2 Full Archive Search for Academic Research
 
-### Updates LOG:
+### Updates log:
 06/11/2021: add "In_reply_to_username" in output .csv file for local version.
 
-### Workiing on:
+### Working on:
 - Equalize code betweet versions.
 
 ## Introduction
