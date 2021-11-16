@@ -1,14 +1,8 @@
 # Twitter API V2 Full Archive Search for Academic Research
 
-### Updates log:
-06/11/2021: add "In_reply_to_username" in output .csv file for local version.
-
-### Working on:
-- Equalize code betweet versions.
-
 ## Introduction
 
-Here you will find a fully functional example of how "Search Tweets" Endpoint (Twitter API V2) works. You'll need:
+Here you will find a fully functional example of how "Search Tweets" Endpoint (Twitter API V2) works. To make it work, you'll need:
 - Access to the full [Twitter Archive for Academic Research](https://developer.twitter.com/en/solutions/academic-research)
 - A Bearer Token (once your access is aproved, you'll need to create a new app and generate the Bearer Token).
 
@@ -85,6 +79,14 @@ During execution, the API query, or when parsing the data, various errors can oc
 - Request too many requests to the API
 - API Timeout
 - Empty API responses
+- ### Known Errors:
+- On big extractions: Native Python3 Recursion limit to 1000 loops. Then recursion limit error. This may occur near 500k tweets retrieved.
+
+### Updates log:
+- 06/11/2021: add "In_reply_to_username" in output .csv file for local version.
+
+### Working on:
+- Equalize code betweet versions.
 
 
 
