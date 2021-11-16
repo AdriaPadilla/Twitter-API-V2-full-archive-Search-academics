@@ -64,7 +64,6 @@ def query_controller(headers, params, pagination_token, loop_counter):
                 raise Exception(api_response.status_code, api_response.text)
 
     # if timeout...
-    except requests.exceptions.ReadTimeout:
+    except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
         print(f"Loop {loop_counter} --> TIMEOUT! On {params} at {datetime.now()} Trying a RETRY ")
         return query_controller(headers, params, pagination_token, loop_counter)
-
