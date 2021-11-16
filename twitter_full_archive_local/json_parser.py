@@ -8,8 +8,8 @@ actual_time = datetime.now()
 
 global_frame = []
 
-def extractor(file, works, position):
-    print(f"working on {position+1} of {works}")
+def extractor(file, works, position, hashtag):
+    print(f"working on file {position+1} // {works}")
     with open(file, encoding="utf-8") as jsonfile:
         data = json.load(jsonfile)
 
@@ -163,8 +163,6 @@ def extractor(file, works, position):
 
                     # Get Year
                     year = element["created_at"].split("-")[0]
-                    # Get Hashtag
-                    hashtag = file.split("__")[0].split("-")[1]
 
                     # Generate the Dataframe
                     df = pd.DataFrame({
@@ -207,23 +205,19 @@ def extractor(file, works, position):
 
             return final_df
 
-def crontroller(filename):
-    files = glob.glob(f"output/{filename}*.json")
+def crontroller(filename, hashtag, capture_name):
+    files = glob.glob(f"{capture_name}/api_responses/{filename}*.json")
     print(files)
     works = len(files)
     for file in files:
         position = files.index(file)
-        dataframe = extractor(file, works, position)
-        if dataframe != "empty":
-            global_frame.append(dataframe)
-        else:
-            print("no results for query")
-            pass
+        dataframe = extractor(file, works, position, hashtag)
+        global_frame.append(dataframe)
 
     try:
         export_frame = pd.concat(global_frame)
         print("exporting Df")
-        export_frame.to_csv(f"dataset-{filename}.csv", index=False)
+        export_frame.to_csv(f"{capture_name}/dataset-{filename}.csv", index=False, sep=",",quotechar='"', line_terminator="\n")
         print("Done Df")
         global_frame.clear()
     except (ValueError, TypeError):
