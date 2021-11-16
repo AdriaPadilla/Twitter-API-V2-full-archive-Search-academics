@@ -64,6 +64,9 @@ will search all tweets between 1st january at 15pm to 15th january at 21pm from 
 
 will search all tweets between 1st january at 15pm to 15th january at 21pm with hashtag #UCL published in 2021. After that will make another search for the second line.
 
+**OUTPUT FOLDER** 
+Define output folder in "capture_name" field
+
 ### 2. Launch the script 
 In terminal:
 ```
