@@ -1,64 +1,27 @@
+# COUNT HASHTAG FREQUENCY ON YOUR DATASETS
+
 import pandas as pd
 import glob
-import collections
+from collections import Counter
 
-files = glob.glob("dataset-*.csv") # DEFINE HERE YOUR DATASET NAME
+files = glob.glob("your-dataset-name.csv")      # DEFINE HERE YOUR DATASET NAME
 
 for file in files:
 
-    file_hashtag_list = []
-    file_mention_list = []
-    file_anotations_list = []
-
-    filename = file
-    print(filename)
+    hashtag_list =[]
     df = pd.read_csv(file)
-    lenth = len(df.index)
-
-    for index, row in df.iterrows():
-        print(f"working on row {index} of {lenth}")
-        date = pd.to_datetime(row["tweet_created_at"], format="%Y-%m-%d %H:%M:%S")
-        year = date.year
-
-        try:
-            hashtags = row["ent_hashtags"].split(";")
-            for hashtag in hashtags:
-                h_pair = (hashtag, year)
-                file_hashtag_list.append(h_pair)
-        except AttributeError:
+    for index, row in df.iterrows():             # For every tweet in dataset
+        hashtags = row["ent_hashtags"]           # The column where hashtags are
+        if hashtags == "false":                  # some tweets dosen't have hashtags :)
             pass
-        try:
-            mentions = row["ent_mentions"].split(";")
-            for mention in mentions:
-                if mention == "false":
-                    pass
-                else:
-                    m_pair = (mention, year)
-                    file_mention_list.append(m_pair)
-        except AttributeError:
-            pass
+        else:
+            list = hashtags.split(";")           # if there're mor than one hashtag, must pass to list
+            for element in list:
+                hashtag_list.append(element)     # append each hashtag to list
 
-        try:
-            anotation_elements = row["ent_anotation_elements"].split(";")
-            anotation_types = row["ent_anotation_types"].split(";")
-        except AttributeError:
-            pass
-
-        for anotation, type in zip(anotation_elements, anotation_types):
-            if anotation == "false":
-                pass
-            else:
-                pair = (anotation, type, year)
-                file_anotations_list.append(pair)
-
-    hashtag_df = pd.DataFrame(file_hashtag_list, columns=["hashtag", "year"])
-    hashtag_resume = hashtag_df.groupby(["hashtag","year"]).size().reset_index(name="count")
-    hashtag_resume.to_excel(f"{filename}-hashtags.xlsx")
-
-    mention_df = pd.DataFrame(file_mention_list, columns=["mention", "year"])
-    mention_resume = mention_df.groupby(["mention","year"]).size().reset_index(name="count")
-    mention_resume.to_excel(f"{filename}-mentions.xlsx")
-
-    anotation_df = pd.DataFrame(file_anotations_list, columns=["anotation", "type", "year"])
-    anotation_resume = anotation_df.groupby(["anotation","type", "year"]).size().reset_index(name="count")
-    anotation_resume.to_excel(f"{filename}anotation.xlsx")
+    c = Counter(hashtag_list)                    # NOW count the frequency
+    frame = pd.DataFrame.from_dict([c])
+    frame_2 = frame.transpose()                  # Doing some magic stuff
+    frame_2.index.name = 'hashtag'
+    su = frame_2.rename(columns={frame_2.columns[0]: 'count'}) # More magic things...
+    su.to_csv(f"{file}-count.csv")               # Your output file
