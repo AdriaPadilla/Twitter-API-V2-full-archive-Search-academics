@@ -1,4 +1,4 @@
-# Twitter API V2 Full Archive Search for Academic Research
+# Twitter for Academic Research
 
 ## Introduction
 
