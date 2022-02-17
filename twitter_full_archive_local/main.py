@@ -12,6 +12,15 @@ from datetime import datetime
 loop_counter = 1  # Set loop counter to 1
 sleeper = 6  # Alert! MAX 300 queries in 15 min window or 1 query/s
 total_tweets = 0 # Number of tweets downloaded
+maximum_tweets = 3000000 # Max Tweets to download (if touch the limit, extraction will fail, I'm working on it)
+
+### RECURSION LIMIT ####
+
+import sys
+sys.setrecursionlimit(round(maximum_tweets/450))
+print(sys.getrecursionlimit())
+
+### END RECURSION LIMIT ###
 
 def loop(headers, query_params, pagination_token, loop_counter, filename, total_tweets):
     json_response = q.query_controller(headers, query_params, pagination_token, loop_counter)
