@@ -12,9 +12,11 @@ from datetime import datetime
 loop_counter = 1  # Set loop counter to 1
 sleeper = 6  # Alert! MAX 300 queries in 15 min window or 1 query/s
 total_tweets = 0 # Number of tweets downloaded
-maximum_tweets = 3000000 # Max Tweets to download (if touch the limit, extraction will fail, I'm working on it)
+maximum_tweets = 10000000 # Max Tweets to download (if touch the limit, extraction will fail, I'm working on it)
 
 ### RECURSION LIMIT ####
+
+### This part sets the Python3 max-recursion limit and adjust this limit to the maximum tweets.
 
 import sys
 sys.setrecursionlimit(round(maximum_tweets/450))
