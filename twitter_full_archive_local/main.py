@@ -98,11 +98,8 @@ if __name__ == "__main__":
         # Start the extraction
         main(loop_counter, query_params, filename, total_tweets)
 
-        # Sleeping 10 second between jobs to avoid reach API limits
-        print("sleeping 10 secs between jobs")
-
         # CREATING DATAFRAMES
 
         par.crontroller(filename, hashtag, capture_name)
-        print("Sleeping 10 Seconds")
-        time.sleep(10)
+        print("Sleeping 10 Seconds") 
+        time.sleep(10) # Sleep to avoid reach api limits
