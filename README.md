@@ -62,7 +62,7 @@ python3 main.py
 
 ```mermaid  
 graph TD;  
-	main.py -->|Step 0 read| capture_jobs.csv;
+	main.py -->|Step 0 Define all your capture parameters| capture_jobs.csv;
 	capture_jobs.csv -->|send parameters| query.py;
 	main.py -->|Step 1| query.py;
 	query.py -->|Create API request| Twitter_API;
