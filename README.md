@@ -63,7 +63,6 @@ python3 main.py
 ```mermaid  
 graph TD;  
 	capture_jobs.csv -->|Step 0 Define all your capture parameters and run| main.py;
-	capture_jobs.csv -->|send parameters| query.py;
 	main.py -->|Step 1| query.py;
 	query.py -->|Create API request| Twitter_API;
 	Twitter_API --> |API response control|api_response;
