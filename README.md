@@ -58,6 +58,24 @@ In terminal:
 python3 main.py
 ```
 
+## Script Workflow ##
+
+```mermaid  
+graph TD;  
+	main.py -->|Step 0 read| capture_jobs.csv;
+	capture_jobs.csv -->|send parameters| query.py;
+	main.py -->|Step 1| query.py;
+	query.py -->|Send credentials and Query parameters| Twitter_API;
+	Twitter_API --> |error control|api_response;
+	api_response --> |create json file|json_dumper.py;
+	main.py -->|Step 2| json_parser.py;
+	json_dumper.py -->|create output folder|outputfolder;
+	outputfolder -->|save API response|api_response_loop_n.json;
+	json_parser.py -->|get all .json files|outputfolder;
+	json_parser.py -->|generate csv| output.csv;
+	
+```
+
 ## API RATE LIMITS
 Twitter API V2, and more precisely, Twitter Full-archive search for Academic Research, have a rate limit of 300 request in a 15 min window. Please, don't change sleep times between queries. 
 
