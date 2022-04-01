@@ -12,17 +12,16 @@ from datetime import datetime
 loop_counter = 1  # Set loop counter to 1
 sleeper = 6  # Alert! MAX 300 queries in 15 min window or 1 query/s
 total_tweets = 0 # Number of tweets downloaded
-maximum_tweets = 10000000 # Max Tweets to download (if touch the limit, extraction will fail, I'm working on it)
+maximum_tweets = 10000000 # Max Tweets to download 10 Milion set is the maximum API QUOTA
 
 ### RECURSION LIMIT ####
-
-### This part sets the Python3 max-recursion limit and adjust this limit to the maximum tweets.
 
 import sys
 sys.setrecursionlimit(round(maximum_tweets/450))
 print(sys.getrecursionlimit())
 
 ### END RECURSION LIMIT ###
+
 
 def loop(headers, query_params, pagination_token, loop_counter, filename, total_tweets):
     json_response = q.query_controller(headers, query_params, pagination_token, loop_counter)
@@ -98,8 +97,11 @@ if __name__ == "__main__":
         # Start the extraction
         main(loop_counter, query_params, filename, total_tweets)
 
+        # Sleeping 10 second between jobs to avoid reach API limits
+        print("sleeping 10 secs between jobs")
+
         # CREATING DATAFRAMES
 
         par.crontroller(filename, hashtag, capture_name)
-        print("Sleeping 10 Seconds") 
-        time.sleep(10) # Sleep to avoid reach api limits
+        print("Sleeping 10 Seconds")
+        time.sleep(10)
