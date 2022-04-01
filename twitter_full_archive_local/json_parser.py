@@ -2,6 +2,7 @@ import glob
 import pandas as pd
 import json
 from datetime import datetime
+from tqdm import tqdm
 
 output_folder = "output/"
 actual_time = datetime.now()
@@ -209,16 +210,16 @@ def crontroller(filename, hashtag, capture_name):
     files = glob.glob(f"{capture_name}/api_responses/{filename}*.json")
     print(files)
     works = len(files)
-    for file in files:
+    for file in tqdm(files, desc="Pharsing JSON files..."):
         position = files.index(file)
         dataframe = extractor(file, works, position, hashtag)
         global_frame.append(dataframe)
-
+    print("Creating df...")
     try:
         export_frame = pd.concat(global_frame)
-        print("exporting Df")
+        print("exporting df")
         export_frame.to_csv(f"{capture_name}/dataset-{filename}.csv", index=False, sep=",",quotechar='"', line_terminator="\n")
-        print("Done Df")
+        print("Done!")
         global_frame.clear()
     except (ValueError, TypeError):
         print("Nothing to Export")
