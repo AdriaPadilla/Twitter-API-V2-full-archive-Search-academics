@@ -7,7 +7,7 @@ This is a fully functional example on how "Search Tweets" Endpoint (Twitter API 
 
 ## Versions
 I created two versions for the same script:
-- **DataBase version**: Will dump all data from the Twitter API to a MySQL/MariaDB database. (**discontinued**)
+- **DataBase version**: Will dump all data from the Twitter API to a MySQL/MariaDB database. (**Discontinued**)
 - **Local Version**: Will create a .json file for each loop (450 tweets per loop). When all data is downloaded, the script generates a .csv pharsing all .json files downloaded.
 
 ## Before Using
