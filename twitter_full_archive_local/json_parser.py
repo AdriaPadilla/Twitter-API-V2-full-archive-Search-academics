@@ -10,7 +10,6 @@ actual_time = datetime.now()
 global_frame = []
 
 def extractor(file, works, position, hashtag):
-    print(f"working on file {position+1} // {works}")
     with open(file, encoding="utf-8") as jsonfile:
         data = json.load(jsonfile)
 
