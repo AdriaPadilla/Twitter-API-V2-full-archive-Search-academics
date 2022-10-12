@@ -89,3 +89,4 @@ During execution, the API query, or when parsing the data, various errors can oc
 
 ### Updates log:
 - 06/11/2021: add "In_reply_to_username" in output .csv file for local version.
+- 12/10/2022: Add code to handle "503 status" API reply on query.py
