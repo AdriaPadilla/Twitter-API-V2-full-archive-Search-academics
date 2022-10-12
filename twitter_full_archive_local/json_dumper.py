@@ -1,9 +1,7 @@
 import os
 import json
 import sys
-
 from datetime import datetime
-
 
 actual_time = datetime.now()
 
