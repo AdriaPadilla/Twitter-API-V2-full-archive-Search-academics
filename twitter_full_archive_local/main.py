@@ -9,13 +9,14 @@ import os
 import pandas as pd
 from datetime import datetime
 
+### Counters and Dummy variables ###
 loop_counter = 1  # Set loop counter to 1
 sleeper = 6  # Alert! MAX 300 queries in 15 min window or 1 query/s
 total_tweets = 0 # Number of tweets downloaded
-maximum_tweets = 10000000 # Max Tweets to download 10 Milion set is the maximum API QUOTA
+maximum_tweets = 1000000 # Max Tweets to download
+####################################
 
-### RECURSION LIMIT ####
-
+### SET RECURSION LIMIT ####
 import sys
 sys.setrecursionlimit(round(maximum_tweets/450))
 print(sys.getrecursionlimit())
@@ -28,7 +29,7 @@ def loop(headers, query_params, pagination_token, loop_counter, filename, total_
     n_tweets, last_date = dumper.save_data(json_response, loop_counter, pharse, filename, capture_name)
     total_tweets = n_tweets + total_tweets
     actual_time = datetime.now()
-    print(f"Loop {loop_counter} --> {query_params['query']} from {query_params['start_time']} to {query_params['end_time']} dumped to db at {actual_time}")
+    print(f"Loop {loop_counter} --> {query_params['query']} from {query_params['start_time']} to {query_params['end_time']} dumped to JSON at {actual_time}")
     print(f"Loop {loop_counter} --> Total Tweets downladed: " + str(total_tweets)+f" | Last date: {last_date}")
     try:
         if json_response.json()["meta"]["next_token"]:
@@ -48,7 +49,7 @@ def main(loop_counter, query_params, filename, total_tweets):
     total_tweets = n_tweets + total_tweets
 
     actual_time = datetime.now()
-    print(f"Loop {loop_counter} --> Query {loop_counter} | {query_params['query']} from {query_params['start_time']} to {query_params['end_time']} dumped to db at {actual_time}")
+    print(f"Loop {loop_counter} --> Query {loop_counter} | {query_params['query']} from {query_params['start_time']} to {query_params['end_time']} dumped to JSON at {actual_time}")
     print(f"Loop {loop_counter} --> Total Tweets downladed: " + str(total_tweets)+f" | Last date: {last_date}")
 
     try:
