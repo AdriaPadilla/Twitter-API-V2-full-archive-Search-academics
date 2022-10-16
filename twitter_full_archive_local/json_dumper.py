@@ -1,11 +1,13 @@
 import os
 import json
 import sys
+
 from datetime import datetime
+
 
 actual_time = datetime.now()
 
-def save_data(json_response, loop_counter, pharse, filename, capture_name):
+def save_data(json_response, loop_counter, filename, capture_name):
     output_folder = f"{capture_name}/api_responses/"
     json_parsed = json_response.json()
     if json_parsed["meta"]["result_count"] == 0:
