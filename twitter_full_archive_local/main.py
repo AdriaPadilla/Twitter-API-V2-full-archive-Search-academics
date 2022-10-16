@@ -24,9 +24,9 @@ print(sys.getrecursionlimit())
 ### END RECURSION LIMIT ###
 
 
-def loop(headers, query_params, pagination_token, loop_counter, filename, total_tweets):
+def loop(headers, query_params, pagination_token, loop_counter, filename, total_tweets, capture_name):
     json_response = q.query_controller(headers, query_params, pagination_token, loop_counter)
-    n_tweets, last_date = dumper.save_data(json_response, loop_counter, pharse, filename, capture_name)
+    n_tweets, last_date = dumper.save_data(json_response, loop_counter, filename, capture_name)
     total_tweets = n_tweets + total_tweets
     actual_time = datetime.now()
     print(f"Loop {loop_counter} --> {query_params['query']} from {query_params['start_time']} to {query_params['end_time']} dumped to JSON at {actual_time}")
@@ -36,39 +36,18 @@ def loop(headers, query_params, pagination_token, loop_counter, filename, total_
             pagination_token = json_response.json()["meta"]["next_token"]
             time.sleep(sleeper)
             loop_counter += 1
-            loop(headers, query_params, pagination_token, loop_counter, filename, total_tweets)
+            loop(headers, query_params, pagination_token, loop_counter, filename, total_tweets, capture_name)
     except KeyError:
         print("Last Page")
 
 
-def main(loop_counter, query_params, filename, total_tweets):
-    headers = q.create_headers(c.BEARER_TOKEN)
-    pagination_token = None
-    json_response = q.query_controller(headers, query_params, pagination_token, loop_counter)
-    n_tweets, last_date = dumper.save_data(json_response, loop_counter, pharse, filename, capture_name)
-    total_tweets = n_tweets + total_tweets
+def main(loop_counter, total_tweets):
 
-    actual_time = datetime.now()
-    print(f"Loop {loop_counter} --> Query {loop_counter} | {query_params['query']} from {query_params['start_time']} to {query_params['end_time']} dumped to JSON at {actual_time}")
-    print(f"Loop {loop_counter} --> Total Tweets downladed: " + str(total_tweets)+f" | Last date: {last_date}")
-
-    try:
-        if json_response.json()["meta"]["next_token"]:
-            pagination_token = json_response.json()["meta"]["next_token"]
-            loop_counter += 1
-            time.sleep(sleeper)
-            loop(headers, query_params, pagination_token, loop_counter, filename, total_tweets)
-    except KeyError:
-        print(f"Last Page for {query_params}")
-
-
-if __name__ == "__main__":
-
-    dates_list = pd.read_csv("capture_jobs.csv", sep=";")  # IMPORT THE JOBS LIST
-    print(dates_list)  # PRINT THE JOBS LIST
+    jobs = pd.read_csv("capture_jobs.csv", sep=";")  # IMPORT THE JOBS LIST
+    print(jobs)  # PRINT THE JOBS LIST
 
     # Starting the loop over the Jobs list
-    for index, row in dates_list.iterrows():
+    for index, row in jobs.iterrows():
         # Compose de query parameters from CSV
         start_date = datetime.strptime(row["start"], "%d/%m/%Y").strftime("%Y-%m-%d")
         end_date = datetime.strptime(row["end"], "%d/%m/%Y").strftime("%Y-%m-%d")
@@ -95,8 +74,28 @@ if __name__ == "__main__":
         capture_time = actual_time.strftime("%d-%m-%Y-%H-%M-%S")
         filename = (f"{pharse}__at_{capture_time}__from_{start_date}__to__{end_date}").replace(":", "-")
 
-        # Start the extraction
-        main(loop_counter, query_params, filename, total_tweets)
+        # Generate APP Auth
+        headers = q.create_headers(c.BEARER_TOKEN)
+
+
+        # Start Extraction
+        pagination_token = None
+        json_response = q.query_controller(headers, query_params, pagination_token, loop_counter)
+        n_tweets, last_date = dumper.save_data(json_response, loop_counter, filename, capture_name)
+        total_tweets = n_tweets + total_tweets
+
+        actual_time = datetime.now()
+        print(f"Loop {loop_counter} --> Query {loop_counter} | {query_params['query']} from {query_params['start_time']} to {query_params['end_time']} dumped to JSON at {actual_time}")
+        print(f"Loop {loop_counter} --> Total Tweets downladed: " + str(total_tweets)+f" | Last date: {last_date}")
+
+        try:
+            if json_response.json()["meta"]["next_token"]:
+                pagination_token = json_response.json()["meta"]["next_token"]
+                loop_counter += 1
+                time.sleep(sleeper)
+                loop(headers, query_params, pagination_token, loop_counter, filename, total_tweets, capture_name)
+        except KeyError:
+            print(f"Last Page for {query_params}")
 
         # Sleeping 10 second between jobs to avoid reach API limits
         print("sleeping 10 secs between jobs")
@@ -106,3 +105,6 @@ if __name__ == "__main__":
         par.crontroller(filename, hashtag, capture_name)
         print("Sleeping 10 Seconds")
         time.sleep(10)
+
+if __name__ == "__main__":
+    main(loop_counter, total_tweets)
