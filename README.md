@@ -22,6 +22,9 @@ json
 requests
 Pandas
 Openyxl # For xlsx datasets
+tqdm (for progress bar)
+
+Note: To install this packages use "pip install package_name" in your comand prompt
 ```
 ## Setup
 You'll need:
@@ -38,7 +41,7 @@ If you use DB version, you'll need to define DB username, password and table nam
 You can define one or **multiple searchs** (one row per search). The script will iterate over the file to search tweets within parameters.
 |start     |start_time|end       |end_time|query             |date_format|time_format|capture_name    |
 |----------|----------|----------|--------|------------------|-----------|-----------|----------------|
-|dd/mm/yyyy|hh:mm:ss  |dd/mm/yyyy|hh:mm:ss|your query|DD-MM-YYY  |HH:MM:SS   |capture save name|
+|dd/mm/yyyy|hh:mm:ss  |dd/mm/yyyy|hh:mm:ss|your query|DD-MM-YYY  |HH:MM:SS   |capture folder name|
 
 **Example 1**
 |start     |start_time|end       |end_time|query             |date_format|time_format|capture_name    |
@@ -90,3 +93,4 @@ During execution, the API query, or when parsing the data, various errors can oc
 ### Updates log:
 - 06/11/2021: add "In_reply_to_username" in output .csv file for local version.
 - 12/10/2022: Add code to handle "503 status" API reply on query.py
+- 16/10/2022: General update. Main.py simplification. Export in xlsx format. 
