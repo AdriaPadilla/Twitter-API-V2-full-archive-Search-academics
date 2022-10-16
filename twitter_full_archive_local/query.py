@@ -58,8 +58,7 @@ def query_controller(headers, params, pagination_token, loop_counter):
                 time.sleep(sleep_seconds)
                 print(f"Loop {loop_counter} --> Retry request {headers} {params}")
                 return query_controller(headers, params, pagination_token, loop_counter)  # Recursion in request
-            
-            # Handle Service Unavailable error 
+
             if api_response.status_code == 503:
                     actual_time = datetime.now()
                     capture_time = actual_time.strftime("%d/%m/%Y %H:%M:%S")
