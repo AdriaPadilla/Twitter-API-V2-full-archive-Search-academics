@@ -84,6 +84,19 @@ def extractor(file, works, position, hashtag):
                         reply_to_id = "false"
                         reply_to_name = "false"
 
+                    # Reply Settings
+                    try:
+                        reply_setting = element["reply_settings"]
+                        reply_setting = str(reply_setting)
+                    except KeyError:
+                        reply_setting = "false"
+
+                    # Conversation ID
+                    try:
+                        conversation_id = element["conversation_id"]
+                    except KeyError:
+                        conversation_id = "false"
+
                     # Get entities
 
                     # Hashtag list
@@ -164,8 +177,23 @@ def extractor(file, works, position, hashtag):
                     # Get Year
                     year = element["created_at"].split("-")[0]
 
+                    # IF THREAD
+                    if "conversation_id" in hashtag:
+                        tweet_type = "reply"
+                        replies = data["includes"]["tweets"]
+                        for reply in replies:
+                            if reply["id"] == conversation_id:
+                                in_reply_to_message = reply["text"]
+                            else:
+                                pass
+
+                    else:
+                        tweet_type = "false"
+                        in_reply_to_message = "false"
+
                     # Generate the Dataframe
                     df = pd.DataFrame({
+                        "tweet_type":tweet_type,
                         "retrieved_at": actual_time,
                         "tweet_id": element["id"],
                         "tweet_created_at": element["created_at"],
@@ -177,8 +205,11 @@ def extractor(file, works, position, hashtag):
                         "username": username,
                         "user_id": element["author_id"],
                         "text": element["text"],
+                        "reply_setting": reply_setting,
+                        "conversation_id": conversation_id,
                         "in_reply_to_id": reply_to_id,
                         "in_reply_to_name": reply_to_name,
+                        "in_reply_to_message": in_reply_to_message,
                         "rt_count": element["public_metrics"]["retweet_count"],
                         "reply_count": element["public_metrics"]["reply_count"],
                         "like_count": element["public_metrics"]["like_count"],
@@ -217,7 +248,7 @@ def crontroller(filename, hashtag, capture_name):
     try:
         export_frame = pd.concat(global_frame)
         print("exporting df")
-        export_frame.to_csv(f"{capture_name}/dataset-{filename}.csv", index=False, sep=",",quotechar='"', line_terminator="\n")
+        export_frame.to_excel(f"{capture_name}/dataset-{filename}.xlsx", index=False)
         print("Done!")
         global_frame.clear()
     except (ValueError, TypeError):
