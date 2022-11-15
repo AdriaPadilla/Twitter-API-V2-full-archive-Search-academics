@@ -63,8 +63,8 @@ def main(loop_counter, total_tweets):
 
         # Create the output name
         try:
-            if not os.path.exists(capture_name):
-                os.makedirs(capture_name)
+            if not os.path.exists(f"datasets/{capture_name}"):
+                os.makedirs(f"datasets/{capture_name}")
         except IndexError:
             print("ERROR")
             pass
@@ -108,3 +108,4 @@ def main(loop_counter, total_tweets):
 
 if __name__ == "__main__":
     main(loop_counter, total_tweets)
+
