@@ -193,23 +193,23 @@ def extractor(file, works, position, hashtag):
 
                     # Generate the Dataframe
                     df = pd.DataFrame({
-                        "tweet_type":tweet_type,
-                        "retrieved_at": actual_time,
+                        # "tweet_type":tweet_type,
+                        # "retrieved_at": actual_time,
                         "tweet_id": element["id"],
                         "tweet_created_at": element["created_at"],
-                        "tweet_year": year,
-                        "query": hashtag,
-                        "sensitive": element["possibly_sensitive"],
+                        # "tweet_year": year,
+                        # "query": hashtag,
+                        # "sensitive": element["possibly_sensitive"],
                         "lang": element["lang"],
-                        "source": element["source"],
+                        # "source": element["source"],
                         "username": username,
                         "user_id": element["author_id"],
                         "text": element["text"],
-                        "reply_setting": reply_setting,
-                        "conversation_id": conversation_id,
-                        "in_reply_to_id": reply_to_id,
+                        # "reply_setting": reply_setting,
+                        # "conversation_id": conversation_id,
+                        # "in_reply_to_id": reply_to_id,
                         "in_reply_to_name": reply_to_name,
-                        "in_reply_to_message": in_reply_to_message,
+                        # "in_reply_to_message": in_reply_to_message,
                         "rt_count": element["public_metrics"]["retweet_count"],
                         "reply_count": element["public_metrics"]["reply_count"],
                         "like_count": element["public_metrics"]["like_count"],
@@ -223,9 +223,9 @@ def extractor(file, works, position, hashtag):
                         "ent_mentions": mentions_string,
                         "ent_anotation_types": annotations_type_string,
                         "ent_anotation_elements": annotations_elements_string,
-                        "place_id": place_id,
+                        # "place_id": place_id,
                         "place_name": place_name,
-                        "coordinates": coordinates_string,
+                        # "coordinates": coordinates_string,
                     }, index=[0])
 
                     general_df.append(df)
@@ -237,7 +237,7 @@ def extractor(file, works, position, hashtag):
             return final_df
 
 def crontroller(filename, hashtag, capture_name):
-    files = glob.glob(f"{capture_name}/api_responses/{filename}*.json")
+    files = glob.glob(f"../datasets/{capture_name}/api_responses/{filename}*.json")
     print(files)
     works = len(files)
     for file in tqdm(files, desc="Pharsing JSON files..."):
@@ -248,7 +248,7 @@ def crontroller(filename, hashtag, capture_name):
     try:
         export_frame = pd.concat(global_frame)
         print("exporting df")
-        export_frame.to_excel(f"{capture_name}/dataset-{filename}.xlsx", index=False)
+        export_frame.to_excel(f"../datasets/{capture_name}/dataset-{filename}.xlsx", index=False)
         print("Done!")
         global_frame.clear()
     except (ValueError, TypeError):
