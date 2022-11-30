@@ -11,14 +11,14 @@ from datetime import datetime
 
 ### Counters and Dummy variables ###
 loop_counter = 1  # Set loop counter to 1
-sleeper = 6  # Alert! MAX 300 queries in 15 min window or 1 query/s
+sleeper = 3.1  # Alert! MAX 300 queries in 15 min window or 1 query/s
 total_tweets = 0 # Number of tweets downloaded
 maximum_tweets = 1000000 # Max Tweets to download
 ####################################
 
 ### SET RECURSION LIMIT ####
 import sys
-sys.setrecursionlimit(round(maximum_tweets/450))
+sys.setrecursionlimit(round(maximum_tweets/490))
 print(sys.getrecursionlimit())
 
 ### END RECURSION LIMIT ###
