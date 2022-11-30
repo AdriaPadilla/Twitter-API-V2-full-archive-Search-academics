@@ -208,7 +208,7 @@ def extractor(file, works, position, hashtag):
                         # "reply_setting": reply_setting,
                         # "conversation_id": conversation_id,
                         # "in_reply_to_id": reply_to_id,
-                        "in_reply_to_name": reply_to_name,
+                        # "in_reply_to_name": reply_to_name,
                         # "in_reply_to_message": in_reply_to_message,
                         "rt_count": element["public_metrics"]["retweet_count"],
                         "reply_count": element["public_metrics"]["reply_count"],
@@ -223,7 +223,7 @@ def extractor(file, works, position, hashtag):
                         "ent_mentions": mentions_string,
                         "ent_anotation_types": annotations_type_string,
                         "ent_anotation_elements": annotations_elements_string,
-                        # "place_id": place_id,
+                        "place_id": place_id,
                         "place_name": place_name,
                         # "coordinates": coordinates_string,
                     }, index=[0])
@@ -248,7 +248,7 @@ def crontroller(filename, hashtag, capture_name):
     try:
         export_frame = pd.concat(global_frame)
         print("exporting df")
-        export_frame.to_excel(f"../datasets/{capture_name}/dataset-{filename}.xlsx", index=False)
+        export_frame.to_csv(f"../datasets/{capture_name}/dataset-{filename}.csv", index=False, sep=",",quotechar='"', line_terminator="\n")
         print("Done!")
         global_frame.clear()
     except (ValueError, TypeError):
