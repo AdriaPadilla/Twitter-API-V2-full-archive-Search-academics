@@ -248,7 +248,7 @@ def crontroller(filename, hashtag, capture_name):
     try:
         export_frame = pd.concat(global_frame)
         print("exporting df")
-        export_frame.to_csv(f"../datasets/{capture_name}/dataset-{filename}.csv", index=False, sep=",",quotechar='"', line_terminator="\n")
+        export_frame.to_csv(f"../datasets/{capture_name}/dataset-{filename}.csv", index=False, sep="\t",quotechar='"', line_terminator="\n")
         print("Done!")
         global_frame.clear()
     except (ValueError, TypeError):
