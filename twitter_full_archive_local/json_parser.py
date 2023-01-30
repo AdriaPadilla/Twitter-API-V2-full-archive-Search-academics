@@ -29,6 +29,11 @@ def extractor(file, works, position, hashtag):
                     for user in list_of_users:
                         if user["id"] == author_id:
                             username = user["username"]
+                            name = user["name"]
+                            followers = user["public_metrics"]["followers_count"]
+                            following = user["public_metrics"]["following_count"]
+                            total_tweets = user["public_metrics"]["tweet_count"]
+                            listed_count = user["public_metrics"]["listed_count"]
                         else:
                             pass
 
@@ -194,12 +199,12 @@ def extractor(file, works, position, hashtag):
                     # Generate the Dataframe
                     df = pd.DataFrame({
                         # "tweet_type":tweet_type,
-                        # "retrieved_at": actual_time,
+                        "retrieved_at": actual_time,
                         "tweet_id": element["id"],
                         "tweet_created_at": element["created_at"],
                         # "tweet_year": year,
-                        # "query": hashtag,
-                        # "sensitive": element["possibly_sensitive"],
+                        "query": hashtag,
+                        "sensitive": element["possibly_sensitive"],
                         "lang": element["lang"],
                         # "source": element["source"],
                         "username": username,
@@ -225,6 +230,11 @@ def extractor(file, works, position, hashtag):
                         "ent_anotation_elements": annotations_elements_string,
                         "place_id": place_id,
                         "place_name": place_name,
+                        "user name": name,
+                        "followers_count": followers,
+                        "following_count": following,
+                        "user_total_tweets": total_tweets,
+                        "listed_on": listed_count,
                         # "coordinates": coordinates_string,
                     }, index=[0])
 
