@@ -21,24 +21,28 @@ def query(query_params, search_url):
     else:
         pass
     api_response = requests.request("GET", search_url, auth=bearer_oauth, params=query_params, timeout=10)
-    response = api_response.json()
-    try:
-        responses_list.append(response)
-        next_token = response["meta"]["next_token"]
-        print(next_token)
-        query_params["next_token"] = next_token
-        time.sleep(sleep_seconds)
-        query(query_params, search_url)
+    if api_response.status_code != 200:
+        print(api_response.text)
 
-    except KeyError:
-        print("last token")
-        print(len(responses_list))
-        with open('mydata.json', 'w') as f:
-            json.dump(responses_list, f)
-        for item in responses_list:
-            dfItem = pd.DataFrame.from_records(item["data"])
-            final_frame.append(dfItem)
-            print(dfItem)
+    else:
+        response = api_response.json()
+        try:
+            responses_list.append(response)
+            next_token = response["meta"]["next_token"]
+            print(next_token)
+            query_params["next_token"] = next_token
+            time.sleep(sleep_seconds)
+            query(query_params, search_url)
+
+        except KeyError:
+            print("last token")
+            print(len(responses_list))
+            with open('mydata.json', 'w') as f:
+                json.dump(responses_list, f)
+            for item in responses_list:
+                dfItem = pd.DataFrame.from_records(item["data"])
+                final_frame.append(dfItem)
+                print(dfItem)
 
 
 def bearer_oauth(r):
@@ -70,9 +74,11 @@ def controller():
         'next_token': next_token
         }
 
-        # Query
+        # QUery
+
         api_response = query(query_params, search_url)
         final = pd.concat(final_frame)
-        final.to_csv(f"../datasets/activity-{hashtag}-{start_date}-{end_date}.csv", sep=";", index=False)
-
+        total_tweets = final["tweet_count"].sum()
+        final.to_csv(f"../datasets/count-{hashtag}-{start_date}-{end_date}-{total_tweets}.csv", sep=";", index=False)
+        print("total tweets: "+str(final["tweet_count"].sum()))
 controller()
