@@ -6,7 +6,7 @@ def parameters(start_date, end_date, start_time, end_time, hashtag):
         'max_results': 490,
         'expansions': 'attachments.media_keys,author_id,geo.place_id,referenced_tweets.id',
         'media.fields': 'duration_ms,media_key,url,type,public_metrics',
-        'user.fields': 'username',
+        'user.fields': 'username,public_metrics',
         }
     pharse = {"value": f"{hashtag}"}
     return query_params, pharse
