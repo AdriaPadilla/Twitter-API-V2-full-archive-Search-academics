@@ -1,15 +1,12 @@
 # Twitter for Academic Research
 
 ## Introduction
-This is a fully functional example on how "Search Tweets" Endpoint (Twitter API V2) works. To make it work, you'll need:
-- Access to the full [Twitter Archive for Academic Research](https://developer.twitter.com/en/solutions/academic-research)
-- A Bearer Token (once your access is aproved, you'll need to create a new app and generate the Bearer Token).
-
-## Versions
-- **Local Version**: Will create a .json file for each loop (450 tweets per loop). When all data is downloaded, the script generates a .csv pharsing all .json files downloaded.
+This is a fully functional example on how "Search Tweets (all)" Twitter API Endpoint (API V2) works. To make it work, you'll need:
+- Request Access to the full [Twitter Archive for Academic Research](https://developer.twitter.com/en/solutions/academic-research)
+- A Bearer Token (once your request access is aproved, you'll need to create a new "project" and generate the Bearer Token).
 
 ## Before Using
-Before using, please carefully read the documentation available on the twitter API V2. This is not intended to be a perfect example, but it can help you better understand how the V2 Twitter API works, and how to perform queries taking advantage of the access level for researchers. There you will find answers to many of the questions you may have.
+Before using, please carefully read the documentation available on the twitter API V2. This code is not intended to be a perfect example, but it can help you better understand how the V2 Twitter API works, and how to perform queries taking advantage of the access level for researchers. There you will find answers to many of the questions you may have.
 
 [Search Tweets READ THE DOCS](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction)
 
@@ -22,7 +19,7 @@ Pandas
 Openyxl # For xlsx datasets
 tqdm (for progress bar)
 
-Note: To install this packages use "pip install package_name" in your comand prompt
+Note: To install this packages use "pip install package_name" in your termninal.
 ```
 ## Setup
 You'll need:
@@ -32,11 +29,10 @@ You'll need:
 
 **Define credentials (credentials.py)**
 Copy/Paste your Twitter API Bearer Token in credentials.py
-If you use DB version, you'll need to define DB username, password and table names in the same file.
 
 ## workflow
-### 1. Define Search jobs in capture_jobs.csv
-You can define one or **multiple searchs** (one row per search). The script will iterate over the file to search tweets within parameters.
+### 1. Define your search jobs in capture_jobs.csv
+You can define one or **multiple searchs** (one row per search). The script will iterate over the csv file to search tweets within parameters.
 |start     |start_time|end       |end_time|query             |date_format|time_format|capture_name    |
 |----------|----------|----------|--------|------------------|-----------|-----------|----------------|
 |dd/mm/yyyy|hh:mm:ss  |dd/mm/yyyy|hh:mm:ss|your query|DD-MM-YYY  |HH:MM:SS   |capture folder name|
@@ -87,8 +83,3 @@ During execution, the API query, or when parsing the data, various errors can oc
 - Empty API responses
 - ### Known Errors:
 - On big extractions: Native Python3 Recursion limit to 1000 loops. Then recursion limit error. This may occur near 500k tweets retrieved.
-
-### Updates log:
-- 06/11/2021: add "In_reply_to_username" in output .csv file for local version.
-- 12/10/2022: Add code to handle "503 status" API reply on query.py
-- 16/10/2022: General update. Main.py simplification. Export in xlsx format. 
