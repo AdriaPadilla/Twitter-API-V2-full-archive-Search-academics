@@ -4,6 +4,9 @@ import json
 from datetime import datetime
 from tqdm import tqdm
 
+# This module will get all JSON Files stored in the folder, and will process all data to create a dataframe and, finally, output a .csv file.
+# Note in to_csv pd function that sep="\t", so "tabulator" will be the col separator. You Can change this if you prefer coma or other character.
+
 output_folder = "output/"
 actual_time = datetime.now()
 
