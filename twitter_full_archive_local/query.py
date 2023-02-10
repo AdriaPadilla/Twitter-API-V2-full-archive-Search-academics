@@ -41,6 +41,7 @@ def query_controller(headers, params, pagination_token, loop_counter):
             print(f"Loop {loop_counter} --> API response OK")
             return api_response
 
+        # ERROR CONTROL SECTION
         # DEAL WITH API RATE LIMITS
         if api_response.status_code != 200:
             print(f"Loop {loop_counter} --> API RESPONSE FAIL STATUS RESPONSE: {api_response.status_code}")
@@ -58,7 +59,8 @@ def query_controller(headers, params, pagination_token, loop_counter):
                 time.sleep(sleep_seconds)
                 print(f"Loop {loop_counter} --> Retry request {headers} {params}")
                 return query_controller(headers, params, pagination_token, loop_counter)  # Recursion in request
-
+            
+            # API NO RESPONSE
             if api_response.status_code == 503:
                     actual_time = datetime.now()
                     capture_time = actual_time.strftime("%d/%m/%Y %H:%M:%S")
@@ -71,11 +73,12 @@ def query_controller(headers, params, pagination_token, loop_counter):
                     print(f"Loop {loop_counter} --> Retry request {headers} {params}")
                     return query_controller(headers, params, pagination_token, loop_counter)  # Recursion in request
 
-            # When nothing works...
+               
+            # When nothing works... (unkwnown errors)
             else:
                 raise Exception(api_response.status_code, api_response.text)
 
-    # if timeout...
+    # if API response timeout...
     except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
         print(f"Loop {loop_counter} --> TIMEOUT! On {params} at {datetime.now()} Trying a RETRY ")
         return query_controller(headers, params, pagination_token, loop_counter)
