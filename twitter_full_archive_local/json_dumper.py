@@ -4,6 +4,7 @@ import sys
 
 from datetime import datetime
 
+# This MOdule will save all API responses in a .json File, inside a folder with the name of the query, and date.
 
 actual_time = datetime.now()
 
