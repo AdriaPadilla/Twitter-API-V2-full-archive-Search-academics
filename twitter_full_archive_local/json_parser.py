@@ -4,9 +4,6 @@ import json
 from datetime import datetime
 from tqdm import tqdm
 
-# This module will get all JSON Files stored in the folder, and will process all data to create a dataframe and, finally, output a .csv file.
-# Note in to_csv pd function that sep="\t", so "tabulator" will be the col separator. You Can change this if you prefer coma or other character.
-
 output_folder = "output/"
 actual_time = datetime.now()
 
@@ -38,7 +35,12 @@ def extractor(file, works, position, hashtag):
                             total_tweets = user["public_metrics"]["tweet_count"]
                             listed_count = user["public_metrics"]["listed_count"]
                         else:
-                            pass
+                            username = "None"
+                            name = "None"
+                            followers = "None"
+                            following = "None"
+                            total_tweets = "None"
+                            listed_count = "None"
 
                     # Get Media Attributes
                     media_duration = 0
@@ -62,7 +64,7 @@ def extractor(file, works, position, hashtag):
                                         media_url = media_attached["url"]
                                         media_url_list.append(media_url)
                                     else:
-                                        media_url = "false"
+                                        media_url = "None"
                                         media_url_list.append(media_url)
 
                                     if media_type == "video":
@@ -70,9 +72,10 @@ def extractor(file, works, position, hashtag):
                                         media_duration = ms_media_duration / 1000
                                         media_views = media_attached["public_metrics"]["view_count"]
                                     else:
-                                        pass
-                                else:
-                                    pass
+                                        ms_media_duration = "None"
+                                        media_duration = "None"
+                                        media_views = "None"
+
                     except KeyError:
                         media_type_list = ["false"]
                         media_url_list = ["false"]
@@ -86,11 +89,13 @@ def extractor(file, works, position, hashtag):
                         for mention in mentions:
                             if reply_to_id == mention["id"]:
                                 reply_to_name = mention["username"]
+                                profile = reply_to_name
                             else:
-                                pass
+                                reply_to_name = "None"
                     except KeyError:
                         reply_to_id = "false"
                         reply_to_name = "false"
+                        profile = username
 
                     # Reply Settings
                     try:
@@ -119,8 +124,25 @@ def extractor(file, works, position, hashtag):
                     except KeyError:
                         hashtags_string = "false"
 
-                    # MENTIONS
+                    ###################
+                    ## TYPE OF TWEET ##
+                    ###################
 
+                    # What kind of tweet is?
+                    try:
+                        tweet_type = element["referenced_tweets"][0]["type"]
+                    except KeyError:
+                        tweet_type = "original"
+
+                    try:
+                        referenced_tweets = element["entities"]["urls"][0]["expanded_url"]
+                    except KeyError:
+                        try:
+                            referenced_tweets = f"https://twitter.com/{reply_to_name}/status/{element['referenced_tweets'][0]['id']}"
+                        except KeyError:
+                            referenced_tweets = "None"
+
+                    # MENTIONS
 
                     try:
                         entities = element["entities"]
@@ -162,11 +184,11 @@ def extractor(file, works, position, hashtag):
                                 if place["id"] == place_id:
                                     place_name = place["full_name"]
                                 else:
-                                    pass
+                                    place_name = "None"
                         except KeyError:
                             place_id = "false"
                             place_name = "false"
-                            pass
+
                         try:
                             coordinates = geo["coordinates"]["coordinates"]
                             list_lat_lon = []
@@ -176,7 +198,7 @@ def extractor(file, works, position, hashtag):
                             coordinates_string = ";".join(list_lat_lon)
                         except KeyError:
                             coordinates_string = "false"
-                            pass
+
                     except KeyError:
                         place_id = "false"
                         coordinates_string = "false"
@@ -185,28 +207,19 @@ def extractor(file, works, position, hashtag):
                     # Get Year
                     year = element["created_at"].split("-")[0]
 
-                    # IF THREAD
-                    if "conversation_id" in hashtag:
-                        tweet_type = "reply"
-                        replies = data["includes"]["tweets"]
-                        for reply in replies:
-                            if reply["id"] == conversation_id:
-                                in_reply_to_message = reply["text"]
-                            else:
-                                pass
 
-                    else:
-                        tweet_type = "false"
-                        in_reply_to_message = "false"
 
                     # Generate the Dataframe
                     df = pd.DataFrame({
-                        # "tweet_type":tweet_type,
                         "retrieved_at": actual_time,
-                        "tweet_id": element["id"],
+                        "query": hashtag,
                         "tweet_created_at": element["created_at"],
                         # "tweet_year": year,
-                        "query": hashtag,
+                        "tweet_url": f"https://twitter.com/{username}/status/{element['id']}",
+                        "tweet_id": element["id"],
+                        "tweet_type":tweet_type,
+                        "in_reply_to_name": reply_to_name,
+                        "referenced_tweets": referenced_tweets,
                         "sensitive": element["possibly_sensitive"],
                         "lang": element["lang"],
                         # "source": element["source"],
@@ -214,10 +227,9 @@ def extractor(file, works, position, hashtag):
                         "user_id": element["author_id"],
                         "text": element["text"],
                         # "reply_setting": reply_setting,
-                        # "conversation_id": conversation_id,
                         # "in_reply_to_id": reply_to_id,
-                        # "in_reply_to_name": reply_to_name,
                         # "in_reply_to_message": in_reply_to_message,
+                        #"conversation": f"https://www.twitter.com/{profile}/status/{conversation_id}",
                         "rt_count": element["public_metrics"]["retweet_count"],
                         "reply_count": element["public_metrics"]["reply_count"],
                         "like_count": element["public_metrics"]["like_count"],
@@ -226,14 +238,13 @@ def extractor(file, works, position, hashtag):
                         "if_video_duration": media_duration,
                         "if_video_views": media_views,
                         "media_url": [media_url_list],
-                        "tweet_url": f"https://twitter.com/{username}/status/{element['id']}",
                         "ent_hashtags": hashtags_string,
                         "ent_mentions": mentions_string,
                         "ent_anotation_types": annotations_type_string,
                         "ent_anotation_elements": annotations_elements_string,
-                        "place_id": place_id,
+                        #"place_id": place_id,
                         "place_name": place_name,
-                        "user name": name,
+                        "visible_user_name": name,
                         "followers_count": followers,
                         "following_count": following,
                         "user_total_tweets": total_tweets,
@@ -261,7 +272,7 @@ def crontroller(filename, hashtag, capture_name):
     try:
         export_frame = pd.concat(global_frame)
         print("exporting df")
-        export_frame.to_csv(f"../datasets/{capture_name}/dataset-{filename}.csv", index=False, sep="\t",quotechar='"', line_terminator="\n")
+        export_frame.to_csv(f"../datasets/{capture_name}/dataset-{filename}.csv", index=False, sep=",",quotechar='"', line_terminator="\n")
         print("Done!")
         global_frame.clear()
     except (ValueError, TypeError):
