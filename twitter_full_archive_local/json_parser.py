@@ -35,12 +35,7 @@ def extractor(file, works, position, hashtag):
                             total_tweets = user["public_metrics"]["tweet_count"]
                             listed_count = user["public_metrics"]["listed_count"]
                         else:
-                            username = "None"
-                            name = "None"
-                            followers = "None"
-                            following = "None"
-                            total_tweets = "None"
-                            listed_count = "None"
+                            pass
 
                     # Get Media Attributes
                     media_duration = 0
