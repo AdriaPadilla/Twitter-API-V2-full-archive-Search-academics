@@ -42,10 +42,10 @@ You can define one or **multiple searchs** (one row per search). The script will
 
 
 **Example (Job queue)**
-| start      | start_time | end        | end_time | query                  	      | capture_name |
-|------------|------------|------------|----------|-----------------------------------|--------------|
-| 01/01/2010 | 00:00:00   | 16/03/2023 | 23:59:59 | from:POTUS -is:retweet            | DM_POTUS     |
-| 01/01/2022 | 00:00:00   | 10/02/2023 | 23:59:59 | (#Ukraine OR #Ucrania -is:retweet | ukraine      |
+| start      | start_time | end        | end_time | query                  	       | capture_name |
+|------------|------------|------------|----------|------------------------------------|--------------|
+| 01/01/2010 | 00:00:00   | 16/03/2023 | 23:59:59 | from:POTUS 		               | DM_POTUS     |
+| 01/01/2022 | 00:00:00   | 10/02/2023 | 23:59:59 | (#Ukraine OR #Ucrania) -is:retweet | ukraine      |
 
 - Fisrt job (first Row) will search all tweets made by @potus Twitter account between january 1st 2010 at 00:00:00, to march 16 20223 at 23:59:59, and save all data with .csv output in /DM_POTUS/ folder.
 - Second job (second row) will search all tweets containing #Ukraine OR #Ucrania hashtags (one of them or both) and not collect retweets. And Will save all data in /ukraine/ folder
