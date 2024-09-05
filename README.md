@@ -1,4 +1,8 @@
+# TWITTER ACADEMIC API IS CLOSED. THIS REPO IS OUT OF DATE
+
 # Twitter for Academic Research
+
+
 
 ## Introduction
 This is a functional example of how "Search Tweets (all)" Twitter's API Endpoint (API V2) works. To make it work, you'll need:
