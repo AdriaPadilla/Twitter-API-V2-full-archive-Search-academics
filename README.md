@@ -1,6 +1,6 @@
 ### Important Notice:
 
-This repository has been deactivated due to technical changes and the restrictive policies imposed on access to the Twitter API, introduced by its current owner, Elon Musk, in 2022.
+This repository is out of date and no longer mantained due to technical changes and the restrictive policies imposed on access to the Twitter API, introduced by its current owner, Elon Musk, in 2022.
 
 It is unacceptable that access to the Twitter API for academic research has been blocked, which appears to be a clear violation of the European Union's Digital Services Act (DSA). This move not only undermines the rights of researchers and developers but also demonstrates Twitter's (now X.com) disregard for the rules that ensure transparency and accountability on digital platforms.
 
